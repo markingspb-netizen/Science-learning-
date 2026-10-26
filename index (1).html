@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UAE Science Quests</title>
+<style>
+:root{--bg:#fbf6ec;--card:#fff;--ink:#1d2433;--mute:#5d6678;--line:#e6dcc8;--gold:#c8891a;--accent:#0f766e;--bad:#b3362b;--good:#1b7f4b;--soft:#f4ecdc;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10151f;--card:#1a2130;--ink:#eef1f7;--mute:#9aa4b8;--line:#2b3448;--gold:#f0b44a;--accent:#2dd4bf;--bad:#ff7b6e;--good:#4ade80;--soft:#222a3b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10151f;--card:#1a2130;--ink:#eef1f7;--mute:#9aa4b8;--line:#2b3448;--gold:#f0b44a;--accent:#2dd4bf;--bad:#ff7b6e;--good:#4ade80;--soft:#222a3b;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:18px 16px 60px}
+h1{font-size:1.9rem;margin:6px 0 2px;line-height:1.15}
+.sub{color:var(--mute);margin:0 0 14px}
+.hud{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.pts{font-size:1.6rem;font-weight:800;color:var(--gold)}
+.rank{font-weight:700}
+.next{color:var(--mute);font-size:.85rem;margin-left:auto}
+.bar{flex:1 1 100%;height:10px;background:var(--line);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--gold));transition:width .5s}
+.badges{display:flex;gap:8px;flex-wrap:wrap;flex:1 1 100%}
+.b{font-size:.8rem;padding:4px 10px;border-radius:99px;border:1px dashed var(--line);color:var(--mute)}
+.b.on{border:1px solid var(--gold);color:var(--gold);font-weight:700;background:color-mix(in srgb,var(--gold) 12%,transparent)}
+.how{margin:14px 0 0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:4px 14px}
+.how summary{cursor:pointer;font-weight:700;padding:8px 0}
+.how ul{margin:4px 0 12px;padding-left:20px}
+.tabs{display:flex;gap:8px;margin:18px 0 12px;overflow-x:auto}
+.tab{flex:1;min-width:110px;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+:root[data-theme="dark"] .tab[aria-selected="true"]{color:#06201d}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tab[aria-selected="true"]{color:#06201d}}
+.intro{color:var(--mute);margin:0 0 14px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.q.done{border-color:var(--good)}
+.q h2{margin:2px 0 6px;font-size:1.2rem}
+.top{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.tag{font-size:.75rem;color:var(--mute);text-transform:uppercase;letter-spacing:.06em}
+.type{font-size:.75rem;font-weight:700;padding:2px 9px;border-radius:99px;background:var(--soft);color:var(--accent)}
+.story p{margin:6px 0 10px}
+.ask{font-weight:700;margin:12px 0 6px}
+.opt,.chip{display:block;width:100%;text-align:left;margin:6px 0;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;cursor:pointer}
+.opt:hover:not(:disabled),.chip:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled,.chip:disabled{cursor:default}
+.no{border-color:var(--bad)!important;color:var(--bad);animation:sh .3s}
+.opt.no{text-decoration:line-through}
+.yes{border-color:var(--good)!important;background:color-mix(in srgb,var(--good) 14%,transparent)!important;font-weight:700}
+.sel{border-color:var(--accent)!important;background:color-mix(in srgb,var(--accent) 14%,transparent);font-weight:700}
+@keyframes sh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.tf{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;margin:6px 0;border:1px solid var(--line);border-radius:10px}
+.tf span{flex:1 1 220px}
+.tf .btns{display:flex;gap:6px}
+.tf button{padding:6px 14px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.tf.ok{border-color:var(--good)}
+.placed{counter-reset:s;list-style:none;padding:0;margin:6px 0}
+.placed li{counter-increment:s;padding:8px 12px;margin:6px 0;border-radius:10px;border:1px solid var(--good);background:color-mix(in srgb,var(--good) 10%,transparent)}
+.placed li::before{content:counter(s) ". ";font-weight:800;color:var(--good)}
+.small{font-size:.85rem;color:var(--mute)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.grid .chip{font-size:.92rem;line-height:1.35;min-height:52px}
+.numrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.numrow input{font:inherit;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:150px}
+.go{padding:9px 18px;border-radius:10px;border:0;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.msg{color:var(--bad);font-weight:600;min-height:1.4em;margin:6px 0 0}
+.hintbtn{background:none;border:0;color:var(--accent);font:inherit;font-weight:600;cursor:pointer;padding:6px 0;margin-top:4px}
+.hint{padding:8px 12px;border-left:3px solid var(--accent);background:var(--soft);border-radius:0 10px 10px 0;margin:4px 0}
+.win{margin-top:12px;padding:12px;border-radius:12px;background:color-mix(in srgb,var(--gold) 12%,transparent);border:1px solid var(--gold)}
+.win b.g{color:var(--gold)}
+.win p{margin:6px 0}
+.book{margin-top:8px;padding:10px 12px;border-radius:10px;background:var(--card);border:1px solid var(--line)}
+.cert{display:none;text-align:center;margin-top:18px;padding:22px;border:2px solid var(--gold);border-radius:18px;background:var(--card)}
+.cert.on{display:block}
+.cert input{font:inherit;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:80%;max-width:280px}
+.reset{background:none;border:0;color:var(--mute);text-decoration:underline;cursor:pointer;margin-top:26px;font:inherit}
+.pop{position:fixed;left:50%;top:22%;transform:translateX(-50%);font-size:2.4rem;font-weight:800;color:var(--gold);pointer-events:none;animation:up 1.1s forwards;z-index:9}
+@keyframes up{to{transform:translate(-50%,-70px);opacity:0}}
+@media print{body *{visibility:hidden}.cert,.cert *{visibility:visible}.cert{position:absolute;left:0;top:0;width:100%}.cert .go{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🔭 UAE Science Quests</h1>
+  <p class="sub">Travel from pearl divers and star navigators to Mars and the asteroid belt. Solve 18 quests, earn points, unlock books!</p>
+  <div class="hud">
+    <div><span class="pts" id="pts">0</span> pts</div>
+    <div class="rank" id="rank"></div>
+    <div class="next" id="next"></div>
+    <div class="bar"><i id="fill"></i></div>
+    <div class="badges" id="badges"></div>
+  </div>
+  <details class="how">
+    <summary>How to play</summary>
+    <ul>
+      <li>Read the story, then solve the task. There are 5 kinds of task: <b>Choose</b>, <b>True or False</b>, <b>Put in Order</b>, <b>Match</b> and <b>Number Puzzle</b>.</li>
+      <li>Each quest is worth up to <b>100 points</b>. Mistakes lower the score, but you always get at least 20.</li>
+      <li>Stuck? Tap <b>💡 Hint</b>. Hints are free!</li>
+      <li>Finish all quests in an era to earn its badge. Finish everything to get your certificate.</li>
+    </ul>
+  </details>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <p class="intro" id="intro"></p>
+  <div id="list"></div>
+  <div class="cert" id="cert">
+    <div style="font-size:2.4rem">🏆</div>
+    <h2>Grand Prize: Science Explorer Certificate</h2>
+    <p>You finished every quest! Type your name:</p>
+    <input id="name" placeholder="Your name" maxlength="30">
+    <p id="certline" style="font-weight:700;color:var(--gold)"></p>
+    <button class="go" id="print">🖨️ Print certificate</button>
+  </div>
+  <button class="reset" id="reset">Reset progress</button>
+</div>
+<script>
+const ERAS=[
+{id:"past",icon:"🏺",name:"Old Times",intro:"Long before satellites and smartphones, people in this land were already scientists. They read the stars to cross the ocean, moved water through the desert with gravity, cooled their homes with the wind and dived deep for pearls holding just one breath."},
+{id:"now",icon:"🚀",name:"Now",intro:"In just a few years the UAE built its own satellites, sent a probe to Mars, flew astronauts to the International Space Station and opened the Arab world’s first nuclear power plant. Let’s see how it all works."},
+{id:"future",icon:"🌌",name:"Future",intro:"The next goals are bold: an airlock for a station around the Moon, a journey to seven asteroids and, one day, a city on Mars. To get there, scientists must solve problems nobody has solved before. Maybe you will help!"}];
+
+const TYPE={choice:"🔘 Choose",tf:"✅ True or False",order:"🔢 Put in Order",match:"🔗 Match",num:"🧮 Number Puzzle"};
+const PEN={choice:40,tf:30,order:15,match:15,num:30};
+
+const Q=[
+/* ---------- OLD TIMES ---------- */
+{e:"past",type:"choice",t:"The Navigator of Julfar",
+ s:"More than 500 years ago, the busy port of Julfar sat on the coast of the Arabian Gulf. Ships came and went carrying dates, pearls, spices and cloth. Around 1432, a boy named Ahmad ibn Majid was born there into a family of sailors.\n\nHe grew up to become one of the greatest navigators in history, and people called him the ‘Lion of the Sea’. He knew the stars, the winds, the coral reefs and the coasts from East Africa to India, and he wrote it all down in books and poems so other sailors could travel safely.",
+ q:"Which emirate is Julfar, his home port, part of today?",o:["Ras Al Khaimah","Fujairah","Umm Al Quwain"],a:0,
+ h:"It is the northernmost emirate, home to Jebel Jais, the highest mountain in the UAE.",
+ f:"Julfar is near today’s city of Ras Al Khaimah. Archaeologists digging there have found pottery from China and other faraway lands, proof of how far its ships travelled.",
+ bk:["Kitab al-Fawa’id","Ahmad ibn Majid","His own navigation handbook, a real sailor’s science book from the 1400s."]},
+
+{e:"past",type:"order",t:"One Breath Deep",
+ s:"Before oil was discovered, pearls were the treasure of the Gulf. Every summer, during the great diving season called al-ghous al-kabir, hundreds of boats left the coast for about four months.\n\nDivers had no oxygen tanks. They held their breath for a minute or more, dived again and again from morning until sunset, and trusted a partner on the boat, the seib, to pull them back up by a rope. Every dive followed the same careful steps.",
+ q:"Put the steps of one dive in the right order.",
+ items:["Clip the fattam (nose clip) onto your nose","Hold the stone weight and sink to the seabed","Fill your basket with oysters","Tug the rope so the seib pulls you up","Back on deck, open the oysters to look for pearls"],
+ h:"You must reach the seabed before you can collect anything, and oysters are opened only on the boat.",
+ f:"Only a few oysters held a pearl, so a crew might open thousands to find a handful of good ones. Pearling made the Gulf famous until cheaper cultured pearls from Japan arrived in the 1920s and 30s and the oil age changed everything.",
+ bk:["The Pearl","John Steinbeck","A short classic novel about a diver who finds a giant pearl, and what it does to his life."]},
+
+{e:"past",type:"choice",t:"Water in the Desert",
+ s:"Rain is rare in the desert, so how did oasis towns like Al Ain grow date palms and vegetables? The answer is the falaj, an ancient water system that works with no pumps at all, only gravity.\n\nA falaj starts where there is water, near the mountains or deep underground, and carries it downhill along gently sloping channels to farms and homes. Some channels run underground for kilometres, so the hot sun cannot dry the water out. Families shared the water by time: each farm got its turn, measured by the sun’s shadow during the day and by the stars at night.",
+ q:"What does a falaj do?",o:["Sends signals with mirrors","Carries water in channels to farms and homes","Grinds dates into flour"],a:1,
+ h:"Think about what a farm in the desert needs most.",
+ f:"Some falaj systems are thousands of years old. The aflaj of Al Ain are part of a UNESCO World Heritage site, and some still carry water today.",
+ bk:["Arabian Sands","Wilfred Thesiger","A classic account of desert life and the knowledge of the Bedu (for older readers)."]},
+
+{e:"past",type:"tf",t:"Towers That Catch the Wind",
+ s:"Long before air conditioning, houses in old Dubai, Sharjah and other towns had a clever cooling trick: the barjeel, or wind tower.\n\nThe tower rises above the roof and is open on all four sides at the top. Whichever way the breeze blows, the tower catches it and sends it down into the room below, while warm air is pushed out. You can still see many wind towers in the Al Fahidi Historical Neighbourhood in Dubai.",
+ q:"Is each sentence true or false?",
+ st:[["A barjeel needs electricity to work.",false],["The tower can catch breezes coming from any direction.",true],["Moving air helps people feel cooler.",true]],
+ h:"The barjeel was built hundreds of years before power plants existed.",
+ f:"Moving air helps sweat evaporate from your skin, and evaporation carries heat away. It’s the same reason you feel cold when you step out of a swimming pool on a windy day.",
+ bk:["The Way Things Work Now","David Macaulay","A giant illustrated book explaining how machines and inventions work."]},
+
+{e:"past",type:"match",t:"Tools of Old Science",
+ s:"People in this land solved hard problems with simple tools made from wood, rope, stone and palm. Each tool used real science: gravity, wind, air pressure or the movement of the stars.\n\nCan you tell which tool did which job?",
+ q:"Tap a tool on the left, then its job on the right.",
+ pairs:[["Kamal","Measures how high the Pole Star is"],["Falaj","Moves water using gravity"],["Barjeel","Catches wind to cool a house"],["Fattam","Stops water going up a diver’s nose"]],
+ h:"The kamal was a sailor’s tool. The fattam was a diver’s tool.",
+ f:"A kamal is a small wooden board on a knotted string. The navigator held the string in his teeth and lined the board up between the horizon and the Pole Star. The higher the star looked, the further north the ship was.",
+ bk:["1001 Inventions and Awesome Facts from Muslim Civilization","National Geographic Kids","Hundreds of inventions and discoveries, with pictures."]},
+
+{e:"past",type:"choice",t:"The Star Calendar",
+ s:"Sailors and desert travellers kept time by the sky, long before clocks or phones. Stars showed the way at night, and the stars that rose before dawn worked like a calendar for the seasons.\n\nThe most famous of all is Suhail. When this bright star first appears low in the southern sky before sunrise, in late August, people across the Gulf know that something they have been waiting for all summer is coming.",
+ q:"What did the rising of the star Suhail tell people?",o:["The worst summer heat is ending","It will snow tomorrow","A sandstorm will arrive within an hour"],a:0,
+ h:"It appears at the end of the hottest season.",
+ f:"Suhail is the name used here for Canopus, the second-brightest star in the night sky. Farmers, pearl divers and sailors planned their work by its rising, and many people in the Gulf still talk about ‘Suhail time’.",
+ bk:["The Stars: A New Way to See Them","H. A. Rey","A friendly guide to finding the constellations yourself."]},
+
+/* ---------- NOW ---------- */
+{e:"now",type:"choice",t:"Hope Reaches Mars",
+ s:"On 20 July 2020 a rocket lifted off from Japan carrying the Emirates Mars Mission, a probe called Hope (Al Amal in Arabic). It was designed and built by Emirati engineers working with partners at American universities.\n\nHope travelled for about seven months and nearly 500 million kilometres. On 9 February 2021 it fired its engines to slow down and was caught by Mars’s gravity. The UAE became only the fifth to reach Mars, and the first Arab country to do it.",
+ q:"What does the Hope probe study?",o:["Mars volcanoes","Mars atmosphere and weather","Water under the ground on Mars"],a:1,
+ h:"Hope is sometimes called the first ‘weather satellite’ for another planet.",
+ f:"Hope studies Mars’s atmosphere and weather across the whole day and all the seasons of the year, something no earlier mission had done in the same way. Its data is shared free with scientists around the world.",
+ bk:["Cosmos","Carl Sagan","A big, beautiful tour of the universe for curious minds."]},
+
+{e:"now",type:"order",t:"The Space Timeline",
+ s:"In 2018 KhalifaSat went into space: the first satellite built entirely by Emirati engineers. It takes sharp photos of Earth that help plan cities and watch the coastline.\n\nAfter that, things moved fast. An Emirati astronaut flew to the International Space Station, Hope launched and reached Mars, and another astronaut floated outside the station on a spacewalk.",
+ q:"Put these milestones in order, oldest first.",
+ items:["KhalifaSat is launched (2018)","Hazza Al Mansouri flies to the ISS (2019)","Hope launches toward Mars (2020)","Hope arrives at Mars (2021)","Sultan Al Neyadi does a spacewalk (2023)"],
+ h:"Look at the years in brackets!",
+ f:"In just five years, the UAE went from its first home-built satellite to the first spacewalk by an Arab astronaut.",
+ bk:["Hidden Figures (Young Readers’ Edition)","Margot Lee Shetterly","The true story of the mathematicians who helped send people to space."]},
+
+{e:"now",type:"tf",t:"Emiratis in Orbit",
+ s:"In September 2019 Hazza Al Mansouri launched on a Russian Soyuz rocket and spent eight days on the International Space Station, the giant laboratory that circles Earth about every 90 minutes.\n\nIn 2023 Sultan Al Neyadi flew on a SpaceX rocket and lived on the station for about six months. He ran experiments, answered questions from students on Earth, and in April 2023 spent about seven hours working outside the station in his spacesuit.",
+ q:"Is each sentence true or false?",
+ st:[["Hazza Al Mansouri was the first Emirati in space.",true],["Sultan Al Neyadi stayed in space for only one day.",false],["Sultan Al Neyadi went outside the station on a spacewalk.",true]],
+ h:"Read the second paragraph again: how long did Al Neyadi stay?",
+ f:"Al Neyadi’s spacewalk was the first ever by an Arab astronaut. On the station the sun rises and sets about 16 times every day!",
+ bk:["Astrophysics for People in a Hurry","Neil deGrasse Tyson","Short chapters about space, perfect for future astronauts."]},
+
+{e:"now",type:"num",t:"The Power of Atoms",
+ s:"On the coast of Abu Dhabi stands Barakah, the first nuclear power plant in the Arab world. Inside its reactors, uranium atoms split apart and release huge amounts of heat. The heat boils water into steam, and the steam spins giant turbines that make electricity, with no smoke from burning fuel.\n\nBarakah has 4 reactors. The last one started working in 2024, and together they can make up to a quarter of the UAE’s electricity.",
+ q:"Each Barakah reactor makes about 1,400 megawatts of electricity. How many megawatts can all 4 make together?",ans:5600,unit:"megawatts",
+ h:"Multiply 1,400 by 4. Try 1,000 × 4 and 400 × 4, then add them.",
+ f:"5,600 megawatts is 5.6 gigawatts! The UAE also builds huge solar parks, like the Mohammed bin Rashid Al Maktoum Solar Park in Dubai, to make clean power straight from sunshine.",
+ bk:["The Boy Who Harnessed the Wind","William Kamkwamba","The true story of a teenager who built a windmill to bring power to his village."]},
+
+{e:"now",type:"choice",t:"Rashid and the Moon",
+ s:"In December 2022 a small UAE rover named Rashid left Earth riding on a Japanese lander called Hakuto-R. Rashid weighed only about 10 kilograms and carried cameras and sensors to study moon dust.\n\nIn April 2023 the lander tried to touch down. Its computer got confused about how high it was, it used up its fuel while still above the surface, and it crashed. Rashid never got to drive on the Moon.",
+ q:"What did the UAE team decide after the crash?",o:["Give up on the Moon forever","Learn from it and build Rashid 2","Pretend it never happened"],a:1,
+ h:"Real scientists treat a failure as information.",
+ f:"Almost every space agency has had crashes. Engineers study exactly what went wrong and make the next try better. That is how science moves forward.",
+ bk:["Rosie Revere, Engineer","Andrea Beaty","A picture book about a girl whose inventions flop, and why a flop is a great first step."]},
+
+{e:"now",type:"match",t:"Science at Work",
+ s:"The UAE gets only about 100 millimetres of rain in a whole year. To help, scientists use cloud seeding: planes fly into suitable clouds and release flares of tiny salt crystals. Water droplets stick to the salt, grow heavier and may fall as rain.\n\nCloud seeding is just one of many science projects working in the UAE right now.",
+ q:"Tap a project on the left, then its job on the right.",
+ pairs:[["Hope probe","Studies the weather on Mars"],["KhalifaSat","Photographs Earth from space"],["Barakah","Makes electricity by splitting atoms"],["Cloud seeding","Helps clouds release more rain"]],
+ h:"You met all four of these in the Now quests!",
+ f:"Satellites like KhalifaSat also help weather scientists find the best clouds for seeding. Different projects often work together.",
+ bk:["Cloudy with a Chance of Meatballs","Judi Barrett","A silly story about food falling from the sky. Compare it with how real rain forms!"]},
+
+/* ---------- FUTURE ---------- */
+{e:"future",type:"choice",t:"City on Mars",
+ s:"In 2017 the UAE announced Mars 2117, a long-term plan to help humans build a settlement on the Red Planet within about a hundred years.\n\nIt won’t be easy. Mars is freezing, about minus 60 °C on average. Its air is very thin and made mostly of carbon dioxide, so people can’t breathe it. Scientists in many countries are working on how to grow food, make water and build homes there.",
+ q:"By which year does the UAE hope to help build a city on Mars?",o:["2050","2117","3000"],a:1,
+ h:"The answer is in the name of the project.",
+ f:"Hope was an early step: to live on Mars, we first need to understand its weather and dust storms.",
+ bk:["Red Mars","Kim Stanley Robinson","A novel about the first people who settle Mars (for older readers)."]},
+
+{e:"future",type:"match",t:"Design a Mars Base",
+ s:"Imagine you are the chief engineer of the first base on Mars. There is no shop, no fresh air and no rain. Everything people need must be made, grown or found on the planet itself.\n\nScientists call this ‘living off the land’. Here are four big problems and four smart solutions.",
+ q:"Tap a need on the left, then the solution on the right.",
+ pairs:[["Air to breathe","Split water into hydrogen and oxygen"],["Drinking water","Dig up and melt underground ice"],["Protection from radiation","Cover the base with thick Martian soil"],["Food","Grow plants in sealed greenhouses"]],
+ h:"Oxygen is part of water (H₂O). Soil is heavy and blocks harmful rays.",
+ f:"These ideas are being tested for real. NASA’s MOXIE experiment on the Perseverance rover even made oxygen from Mars’s carbon dioxide air!",
+ bk:["Packing for Mars","Mary Roach","A funny, true book about how humans survive in space (for teens)."]},
+
+{e:"future",type:"tf",t:"A Door Near the Moon",
+ s:"Gateway will be a small space station circling the Moon, built by NASA together with partners from Europe, Japan, Canada and the UAE. Astronauts will stop there on their way to the Moon’s surface.\n\nThe UAE’s job is to build the airlock, the special room astronauts use to go outside. In return, an Emirati astronaut will get a seat on a future mission to Gateway.",
+ q:"Is each sentence true or false?",
+ st:[["Gateway will orbit the Moon, not Earth.",true],["An airlock lets astronauts go outside without letting all the air escape.",true],["The UAE is building Gateway’s rocket engines.",false]],
+ h:"Read again what the UAE’s job is.",
+ f:"An airlock has two doors. Astronauts close the inner door, pump the air out, then open the outer door. Coming back, they do it in reverse.",
+ bk:["Project Hail Mary","Andy Weir","A fun space adventure full of science problem-solving."]},
+
+{e:"future",type:"num",t:"Seven Asteroids",
+ s:"Between Mars and Jupiter lies the asteroid belt: millions of rocks left over from when the planets formed, about 4.6 billion years ago. Studying them is like reading the solar system’s baby photos.\n\nThe UAE’s MBR Explorer plans to launch in 2028. It will use the gravity of planets to speed up, fly past seven asteroids, and finally land on an asteroid called Justitia in 2034.",
+ q:"If MBR Explorer launches in 2028 and lands in 2034, how many years is the journey?",ans:6,unit:"years",
+ h:"Subtract: 2034 − 2028.",
+ f:"Justitia is unusually red, which may mean it formed far out in the solar system and drifted inward. Landing on it could teach us where some of the building blocks of planets came from.",
+ bk:["George’s Secret Key to the Universe","Lucy & Stephen Hawking","An adventure story packed with real space science."]},
+
+{e:"future",type:"order",t:"Journey to Mars",
+ s:"Getting to Mars is one of the hardest trips in the solar system. Earth and Mars line up well only about once every two years, so missions must launch on time.\n\nThen the spacecraft has to cross millions of kilometres, slow down at exactly the right moment and, if it is landing, survive the famous ‘seven minutes of terror’ as it drops through the thin Martian air.",
+ q:"Put the steps of a Mars landing mission in order.",
+ items:["The rocket launches from Earth","The spacecraft cruises through space for about 7 months","Engines fire to slow down at Mars","A heat shield and parachute slow the lander in the air","The lander touches down on the surface"],
+ h:"You must arrive at Mars before you can slow down there.",
+ f:"Hope did steps 1 to 3 and then stayed in orbit, because it studies Mars from above. Rovers like Perseverance did all five.",
+ bk:["Moonshot: The Flight of Apollo 11","Brian Floca","A beautifully illustrated story of the first Moon landing."]},
+
+{e:"future",type:"choice",t:"Farms of the Future",
+ s:"Growing food in the desert takes a lot of water, and water is precious here. So the UAE is trying new ways to farm. In 2022 Bustanica opened near Dubai, one of the largest vertical farms in the world.\n\nInside, leafy greens grow on shelves stacked high toward the ceiling, under LED lights, with no fields of soil. The water is cleaned and reused again and again.",
+ q:"Why are vertical farms useful in the desert?",o:["They use much less water and don’t need big fields","They make it rain outside","They grow plants with no light at all"],a:0,
+ h:"Think about what is scarce in the desert.",
+ f:"Bustanica says it uses about 95% less water than farming in open fields. The same ideas could one day feed astronauts on the Moon and Mars.",
+ bk:["The Omnivore’s Dilemma (Young Readers Edition)","Michael Pollan","Where does our food really come from? A fascinating investigation."]}
+];
+
+const RANKS=[[0,"🌱 Curious Cadet"],[300,"🧭 Explorer"],[700,"🔬 Scientist"],[1100,"🛰️ Engineer"],[1500,"🚀 Astronaut"]];
+const KEY="uaeq2";
+const fresh=()=>({pts:0,done:{},wrong:{},part:{},hint:{},era:"past",name:""});
+let S=fresh();
+try{const v=localStorage.getItem(KEY);if(v)S=Object.assign(S,JSON.parse(v))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const $=i=>document.getElementById(i);
+const eraTotal=e=>Q.filter(q=>q.e===e).length;
+const doneCount=e=>Q.filter((q,i)=>q.e===e&&S.done[i]).length;
+let sel=null; // match: {i,l}
+
+// stable shuffle per quest, never returns the original order
+function shuf(n,seed){
+ const a=[...Array(n).keys()];let x=seed*9301+49297;
+ for(let k=n-1;k>0;k--){x=(x*9301+49297)%233280;const j=Math.floor(x/233280*(k+1));[a[k],a[j]]=[a[j],a[k]]}
+ if(a.every((v,k)=>v===k))a.push(a.shift());
+ return a;
+}
+function pop(t){const d=document.createElement("div");d.className="pop";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),1100)}
+
+function hud(){
+ $("pts").textContent=S.pts;
+ let r=RANKS[0][1],nx=null;RANKS.forEach(x=>{if(S.pts>=x[0])r=x[1];else if(!nx)nx=x});
+ $("rank").textContent=r;
+ $("next").textContent=nx?`${nx[0]-S.pts} pts to ${nx[1]}`:"Top rank reached!";
+ const n=Object.keys(S.done).length;
+ $("fill").style.width=Math.round(n/Q.length*100)+"%";
+ $("badges").innerHTML=ERAS.map(e=>`<span class="b ${doneCount(e.id)===eraTotal(e.id)?"on":""}">${e.icon} ${e.name} Master</span>`).join("");
+ const all=n===Q.length;
+ $("cert").classList.toggle("on",all);
+ if(document.activeElement!==$("name"))$("name").value=S.name||"";
+ certLine();
+}
+function certLine(){const all=Object.keys(S.done).length===Q.length;$("certline").textContent=all&&S.name?`🌟 ${S.name}, Science Explorer of the UAE! ${S.pts} points 🌟`:""}
+function tabs(){
+ $("tabs").innerHTML=ERAS.map(e=>`<button class="tab" role="tab" aria-selected="${S.era===e.id}" data-e="${e.id}">${e.icon} ${e.name} (${doneCount(e.id)}/${eraTotal(e.id)})</button>`).join("");
+ $("intro").textContent=ERAS.find(e=>e.id===S.era).intro;
+}
+
+function task(q,i){
+ const d=S.done[i],p=S.part[i];
+ if(q.type==="choice")
+  return q.o.map((o,k)=>`<button class="opt ${d&&k===q.a?"yes":""}" data-act="choice" data-i="${i}" data-k="${k}" ${d?"disabled":""}>${o}</button>`).join("");
+ if(q.type==="tf"){
+  const got=p||{};
+  return q.st.map((s,k)=>{const ok=d||got[k];return `<div class="tf ${ok?"ok":""}"><span>${s[0]}</span><div class="btns">${
+   [true,false].map(v=>`<button data-act="tf" data-i="${i}" data-k="${k}" data-v="${v}" class="${ok&&s[1]===v?"yes":""}" ${ok?"disabled":""}>${v?"True":"False"}</button>`).join("")}</div></div>`}).join("");
+ }
+ if(q.type==="order"){
+  const n=d?q.items.length:(p||0),mix=shuf(q.items.length,i+7);
+  return `<ol class="placed">${q.items.slice(0,n).map(t=>`<li>${t}</li>`).join("")}</ol>`+
+   (n<q.items.length?`<p class="small">Tap the step that comes ${n?"next":"first"}:</p>`+mix.filter(k=>k>=n).map(k=>`<button class="chip" data-act="order" data-i="${i}" data-k="${k}">${q.items[k]}</button>`).join(""):"");
+ }
+ if(q.type==="match"){
+  const got=d?q.pairs.map((_,k)=>k):(p||[]),mix=d?got:shuf(q.pairs.length,i+3);
+  const L=q.pairs.map((pr,k)=>{const m=got.includes(k);return `<button class="chip ${m?"yes":""} ${sel&&sel.i===i&&sel.l===k?"sel":""}" data-act="ml" data-i="${i}" data-k="${k}" ${m?"disabled":""}>${pr[0]}</button>`}).join("");
+  const R=mix.map(k=>{const m=got.includes(k);return `<button class="chip ${m?"yes":""}" data-act="mr" data-i="${i}" data-k="${k}" ${m?"disabled":""}>${q.pairs[k][1]}</button>`}).join("");
+  return `<div class="grid"><div>${L}</div><div>${R}</div></div>`;
+ }
+ if(q.type==="num"){
+  if(d)return `<p><b class="yes" style="padding:6px 12px;border-radius:10px;border:1px solid">✔ ${q.ans.toLocaleString("en")} ${q.unit}</b></p>`;
+  return `<div class="numrow"><input type="number" inputmode="numeric" id="n${i}" placeholder="Your answer" aria-label="Your answer"><span class="small">${q.unit}</span><button class="go" data-act="num" data-i="${i}">Check</button></div><p class="msg" id="m${i}"></p>`;
+ }
+}
+function card(i){
+ const q=Q[i],d=S.done[i],nth=Q.slice(0,i+1).filter(x=>x.e===q.e).length;
+ return `<div class="q ${d?"done":""}" id="q${i}">
+ <div class="top"><span class="tag">Quest ${nth}${d?" · Complete ✅":""}</span><span class="type">${TYPE[q.type]}</span></div>
+ <h2>${q.t}</h2><div class="story">${q.s.split("\n\n").map(t=>`<p>${t}</p>`).join("")}</div>
+ <p class="ask">${q.q}</p>${task(q,i)}
+ ${d?win(q,i):(S.hint[i]?`<div class="hint">💡 ${q.h}</div>`:`<button class="hintbtn" data-act="hint" data-i="${i}">💡 Hint</button>`)}
+ </div>`;
+}
+function win(q,i){return `<div class="win"><b class="g">🎉 Reward unlocked! +${S.done[i]} pts</b><p><b>Did you know?</b> ${q.f}</p><div class="book">📚 <b>Read next:</b> <i>${q.bk[0]}</i> by ${q.bk[1]}<br><small>${q.bk[2]}</small></div></div>`}
+function list(){$("list").innerHTML=Q.map((q,i)=>q.e===S.era?card(i):"").join("")}
+function render(){hud();tabs();list()}
+function redraw(i){const el=$("q"+i);if(el)el.outerHTML=card(i)}
+
+function complete(i){
+ const q=Q[i],p=Math.max(100-PEN[q.type]*(S.wrong[i]||0),20);
+ S.pts+=p;S.done[i]=p;delete S.part[i];pop("+"+p);save();hud();tabs();redraw(i);
+}
+function miss(i,el){S.wrong[i]=(S.wrong[i]||0)+1;save();if(el){el.classList.remove("no");void el.offsetWidth;el.classList.add("no")}}
+
+$("tabs").onclick=e=>{const b=e.target.closest(".tab");if(b){S.era=b.dataset.e;sel=null;save();render();window.scrollTo({top:$("tabs").offsetTop-10,behavior:"smooth"})}};
+$("list").onclick=e=>{
+ const b=e.target.closest("[data-act]");if(!b||b.disabled)return;
+ const i=+b.dataset.i,k=+b.dataset.k,q=Q[i],act=b.dataset.act;
+ if(S.done[i])return;
+ if(act==="hint"){S.hint[i]=1;save();redraw(i);return}
+ if(act==="choice"){if(k===q.a)complete(i);else{miss(i,b);b.disabled=true}}
+ if(act==="tf"){
+  if((b.dataset.v==="true")===q.st[k][1]){const p=S.part[i]=S.part[i]||{};p[k]=1;
+   if(q.st.every((_,j)=>p[j]))complete(i);else{save();redraw(i)}}
+  else{miss(i,b);b.disabled=true}
+ }
+ if(act==="order"){const n=S.part[i]||0;
+  if(k===n){S.part[i]=n+1;if(n+1===q.items.length)complete(i);else{save();redraw(i)}}
+  else miss(i,b);
+ }
+ if(act==="ml"){sel={i,l:k};redraw(i)}
+ if(act==="mr"){
+  if(!sel||sel.i!==i){b.classList.remove("no");void b.offsetWidth;b.classList.add("no");return}
+  if(k===sel.l){const p=S.part[i]=S.part[i]||[];p.push(k);sel=null;
+   if(p.length===q.pairs.length)complete(i);else{save();redraw(i)}}
+  else{miss(i,b);sel=null;redraw(i);const nb=$("q"+i).querySelector(`[data-act="mr"][data-k="${k}"]`);if(nb)nb.classList.add("no")}
+ }
+ if(act==="num"){checkNum(i)}
+};
+function checkNum(i){
+ const q=Q[i],inp=$("n"+i),v=parseFloat(String(inp.value).replace(/[ ,]/g,""));
+ if(isNaN(v)){$("m"+i).textContent="Type a number first.";return}
+ if(v===q.ans)complete(i);
+ else{miss(i,inp);$("m"+i).textContent=(v<q.ans?"Too small":"Too big")+", try again!"}
+}
+$("list").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id&&e.target.id[0]==="n")checkNum(+e.target.id.slice(1))});
+$("name").oninput=e=>{S.name=e.target.value.trim();save();certLine()};
+$("print").onclick=()=>window.print();
+$("reset").onclick=()=>{if(confirm("Reset all progress?")){S=fresh();sel=null;save();render()}};
+render();
+</script>
+</body>
+</html>
